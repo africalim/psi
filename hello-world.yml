@@ -8,20 +8,37 @@ cabs:
                         who:
                                 dtype: str
                                 required: true
+                        append:
+                                dtype: bool
+                                default: false
                 flavour: python-code
-                command: print("Hello", who, "!!")
+                outputs:
+                        where:
+                                dtype: File
+                                required: true
+                command: |
+                        mode = 'w+' if not append else 'a+'
+                        with open(where, mode) as f:
+                                f.writelines([f"Hello {who} !!\n"])
 
 myrecipe:
         inputs:
                 name:
                         dtype: str
                         default: world
+        outputs:
+                logname:
+                        dtype: str
+                        default: output.log
         steps:
                 ola:
                         cab: greeter
                         params:
                                 who: =recipe.name
+                                where: =recipe.logname
                 jose:
                         cab: greeter
                         params:
                                 who: halapinio
+                                append: true
+                                where: =steps.ola.where
