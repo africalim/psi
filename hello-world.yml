@@ -1,0 +1,27 @@
+opts:
+        backend:
+                select: native
+
+cabs:
+        greeter:
+                inputs:
+                        who:
+                                dtype: str
+                                required: true
+                flavour: python-code
+                command: print("Hello", who, "!!")
+
+myrecipe:
+        inputs:
+                name:
+                        dtype: str
+                        default: world
+        steps:
+                ola:
+                        cab: greeter
+                        params:
+                                who: =recipe.name
+                jose:
+                        cab: greeter
+                        params:
+                                who: halapinio
